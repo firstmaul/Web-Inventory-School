@@ -1,0 +1,20 @@
+{
+  "name": "inventaris",
+  "version": "1.0.0",
+  "description": "backend",
+  "main": "Server.js",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "bootstrap": "^3.3.7",
+    "express": "^4.14.0",
+    "jquery": "^3.1.1",
+    "mongodb": "^2.2.21"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "trio",
+  "license": "ISC"
+}
