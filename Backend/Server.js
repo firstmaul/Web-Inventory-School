@@ -27,3 +27,23 @@ Mongoc.connect(mongoUrl, function(err, database){
 
     };
 });
+app.get('/users', function(req, res){
+    var users = db.collection('users');
+    users.find().toArray(function(err, manyNames){
+        res.json({
+            user:manyNames
+        });
+    });
+});
+app.get('/table/:users',function(req, res){
+    var nama = req.params.nama;
+    var names = db.collection('users');
+    names.insert({name:name},function(err, result){
+        if(err){
+            res.send('error inserting new name into db');
+        }
+        else{
+            res.send('Succes !');
+        }
+    })
+});
