@@ -20,8 +20,8 @@ Mongoc.connect(mongoUrl, function(err, database){
         db = database;
         //var heroes = db.collection()
 
-        app.listen(2020,'localhost',function(){
-        console.log('Listening on localhost:2020');
+        app.listen(9194,'localhost',function(){
+        console.log('Listening on localhost:9194');
 
         });
 
@@ -31,14 +31,15 @@ app.get('/users', function(req, res){
     var users = db.collection('users');
     users.find().toArray(function(err, manyNames){
         res.json({
-            user:manyNames
+            users:manyNames
         });
     });
 });
-app.get('/table/:users',function(req, res){
+app.get('/table/:nama/:alamat',function(req, res){
     var nama = req.params.nama;
-    var names = db.collection('users');
-    names.insert({name:name},function(err, result){
+    var alamat = req.params.alamat;
+    var users = db.collection('users');
+    users.insert({name:nama},function(err, result){
         if(err){
             res.send('error inserting new name into db');
         }
