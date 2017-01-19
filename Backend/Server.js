@@ -71,7 +71,7 @@ app.post('/insert', function(req, res,next){
     res.json(item);
 });
 
-app.post('/update', function(req, res, next){
+app.post('/postupdate', function(req, res, next){
     var item ={
         nama:req.body.nama,
         deskripsi:req.body.deskripsi,
@@ -81,28 +81,46 @@ app.post('/update', function(req, res, next){
         stok:req.body.stok
     };
     var id = req.body.id;
-    Mongoc.connect(mongoUrl, function(err, db){
+    // Mongoc.connect(mongoUrl, function(err, db){
         assert.equal(null, err);
-        db.collection('inventaris').updateOne({"_id":objectid(id)},{$set:item}, function(err, result){
+        db.collection('inventaris').updateOne({_id:objectid(id)},{$set:item}, function(err, result){
             assert.equal(null, err);
             console.log('Item Updated');
-            db.close();
-        });
+        // });
     });
+    res.json({ message: 'Successfully Updated' });
 });
         
 
 app.post('/delete', function(req, res, next){
-    var nama = req.body.nama;
+    var id = req.body.id;
     // Mongoc.connect(mongoUrl, function(err, db){
     //       assert.equal(null, err);
-        db.collection('inventaris').deleteOne({nama:nama}, function(err, result){
+        db.collection('inventaris').deleteOne({_id:objectid(id)}, function(err, result){
             assert.equal(null, err);
             console.log('Item Deleted');
             // db.close();
         // });
     });
-    res.json(nama);
+    res.json({ message: 'Successfully deleted' });
+
+});
+// app.delete('/deleteall', function(req, res))
+app.put('/update', function(req, res, next){
+    var item ={
+        nama:req.body.nama,
+        deskripsi:req.body.deskripsi,
+        tipe:req.body.tipe,
+        panjang:req.body.panjang,
+        lebar:req.body.lebar,
+        stok:req.body.stok
+    };
+    var id = req.body.id;
+    db.collection('inventaris').updateOne({_id:objectid(id) },{$set:item},function(err, result) {
+        assert.equal(null, err);
+        console.log('Item Updated');
+    });
+    res.json({ message: 'Successfully Updated' });
 
 });
 
