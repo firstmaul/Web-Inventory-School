@@ -13,7 +13,7 @@ app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next();
         });
-        
+
 router.use(bodyparser.json());
 router.use(bodyparser.urlencoded({
     extended:true
@@ -96,12 +96,13 @@ app.post('/delete', function(req, res, next){
     var nama = req.body.nama;
     // Mongoc.connect(mongoUrl, function(err, db){
     //       assert.equal(null, err);
-        db.collection('inventaris').deleteOne({nama:"nama"}, function(err, result){
+        db.collection('inventaris').deleteOne({nama:nama}, function(err, result){
             assert.equal(null, err);
             console.log('Item Deleted');
             // db.close();
         // });
     });
+    res.json(nama);
 
 });
 
