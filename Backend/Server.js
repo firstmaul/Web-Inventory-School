@@ -8,7 +8,19 @@ app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({
     extended:true
 }));
+app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+        });
+        
+router.use(bodyparser.json());
+router.use(bodyparser.urlencoded({
+    extended:true
+}));
+
 //CRUD
+var db = require('mongodb');
 var Mongoc = require('mongodb').MongoClient;
 var objectid = require('mongodb').ObjectID;
 var mongoUrl = 'mongodb://localhost:27017/inventory'
@@ -17,64 +29,78 @@ router.get('/', function(req, res, next){
     res.render('Server');
 });
 
-router.get('get-data', function(req, res, next){
-    var resultArray =[];
-    Mongoc.connect(mongoUrl, function(err, db){
-    assert.equal(null, err);
-    var cursor = db.collection('user-data').find();
-    cursor.forEach(function(doc, err){
-        assert.equal(null, err);
-        resultArray.push(doc);
-    },function(){
-        db.close();
-        res.render('Server', {item: resultArray});
-        }); 
 
+
+app.get('/getallinventaris', function(req, res){
+    
+    var cursor = db.collection('inventaris');
+    cursor.find().toArray(function(err, docs){
+        console.log('fetching')
+        res.json(docs);
+
+   
     });
 
 });
 
-router.post('/insert', function(req, res, next){
+
+// app.use(function(req, res, next){
+//             res.header('Acces-Control-Allow-Origin');
+// });
+app.post('/insert', function(req, res,next){
+    console.log('Starting');
+    
+    // var hasil = json.body;
     var item ={
-        user:req.body.user,
-        alamat:req.body.alamat
+        nama:req.body.nama,
+        deskripsi:req.body.deskripsi,
+        tipe:req.body.tipe,
+        panjang:req.body.panjang,
+        lebar:req.body.lebar,
+        stok:req.body.stok
+
     };
-    Mongoc.connect(mongoUrl, function(err, db){
-        assert.equal(null, err);
-        db.collection('user-data').insertOne(item, function(err, result){
+    // Mongoc.connect(mongoUrl, function(err, db){
+    //     assert.equal(null, err);
+        db.collection('inventaris').insert(item, function(err, result){
             assert.equal(null, err);
             console.log('Item Inserted');
-            db.close();
-        });
+            // db.close();
+        // });
     });
-    res.redirect('/');
+    res.json(item);
 });
 
-router.post('/update', function(req, res, next){
+app.post('/update', function(req, res, next){
     var item ={
-        user:req.body.user,
-        alamat:req.body.alamat
+        nama:req.body.nama,
+        deskripsi:req.body.deskripsi,
+        tipe:req.body.tipe,
+        panjang:req.body.panjang,
+        lebar:req.body.lebar,
+        stok:req.body.stok
     };
     var id = req.body.id;
     Mongoc.connect(mongoUrl, function(err, db){
         assert.equal(null, err);
-        db.collection('user-data').updateOne({"_id":objectid(id)},{$set:item}, function(err, result){
+        db.collection('inventaris').updateOne({"_id":objectid(id)},{$set:item}, function(err, result){
             assert.equal(null, err);
             console.log('Item Updated');
             db.close();
         });
     });
 });
+        
 
-router.post('delete', function(req, res, next){
-    var id = req.body.id;
-    Mongoc.connect(mongoUrl, function(err, db){
-        assert.equal(null, err);
-        db.collection('user-data').deleteOne({"_id":objectid(id)}, function(err, result){
+app.post('/delete', function(req, res, next){
+    var nama = req.body.nama;
+    // Mongoc.connect(mongoUrl, function(err, db){
+    //       assert.equal(null, err);
+        db.collection('inventaris').deleteOne({nama:"nama"}, function(err, result){
             assert.equal(null, err);
             console.log('Item Deleted');
-            db.close();
-        });
+            // db.close();
+        // });
     });
 
 });
@@ -82,7 +108,7 @@ router.post('delete', function(req, res, next){
 
 
 
-var db;
+
 //init mongodb
 Mongoc.connect(mongoUrl, function(err, database){
     if(err){
@@ -94,48 +120,13 @@ Mongoc.connect(mongoUrl, function(err, database){
         db = database;
         //var heroes = db.collection()
 
-        app.listen(9194,'localhost',function(){
-        console.log('Listening on localhost:9194');
+
+
+        app.listen(3000,'0.0.0.0',function(){
+        console.log('Listening on localhost:3000');            
 
         });
+        
 
     };
-});
-app.get('/users', function(req, res){
-    var users = db.collection('users');
-    users.find().toArray(function(err, manyNames){
-        res.json({
-            users:manyNames
-        });
-    });
-});
-app.get('/table/:nama/:alamat',function(req, res){
-    var nama = req.params.nama;
-    var alamat = req.params.alamat;
-    var users = db.collection('users');
-    users.insert({name:nama},function(err, result){
-        if(err){
-            res.send('error inserting new name into db');
-        }
-        else{
-            res.send('Succes !');
-        }
-    })
-});
-app.post("/apa", function (req, res) {
-    console.log(req.body.user.name)
-});
-app.get('/',function(req,res){
-    res.json({
-        name:'Maul',
-        alamat:'Bogor'
-    });
-
-});
-app.post('/name/alamat',function(req, res){
-    var name = req.body.name;
-    var alamat = req.body.alamat;
-    res.send('hello '+ name + 'Age' + alamat);
-
-    
 });
