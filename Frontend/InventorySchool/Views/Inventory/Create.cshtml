@@ -1,0 +1,92 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Inventaris";
+}
+
+<h3>@ViewData["Message"].</h3>
+
+<form id="inventoryForm">
+    <div class="form-group">
+        <label for="select" class="control-label">Tipe</label>
+        <select class="form-control" id="select">
+                <option>Kursi</option>
+                <option>Meja Murid</option>
+                <option>Meja Guru</option>                
+        </select>                    
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputName">Nama</label>
+        <input class="form-control" id="inputName" type="text">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputDeskripsi">Deskripsi</label>        
+        <textarea class="form-control" rows="3" id="inputDeskripsi"></textarea>
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputPanjang">Panjang</label>
+        <input class="form-control" id="inputPanjang" type="number">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputLebar">Lebar</label>
+        <input class="form-control" id="inputLebar" type="number">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputStok">Stok</label>
+        <input class="form-control" id="inputStok" type="number">
+    </div>
+    <div class="form-group">
+        <div class="col-lg-10 col-lg-offset-2">
+            <button type="reset" class="btn btn-default">Cancel</button>
+            <button id="btnSubmit" type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+<script type="text/javascript">
+    $('#inventoryForm').submit(function (event) {
+        //var select = inventoryForm.getElementById("select");
+        //var name = inventoryForm.getElementById("inputName");
+        //var deskripsi = inventoryForm.getElementById("inputDeskripsi");
+        //var panjang = inventoryForm.getElementById("inputPanjang");
+        //var lebar = inventoryForm.getElementById("inputLebar");
+        //var stok = inventoryForm.getElementById("inputStok");
+
+        event.preventDefault();
+
+        //var $form = $(this);
+        //var term = $form.find("input[name='inputName']").val();
+        //var url = $form.attr("action");               
+        var inventory = {
+            nama: $("#inputName")[0].value
+            , deskripsi: $("#inputDeskripsi")[0].value
+            , tipe: $("#select")[0].value
+            , panjang: $("#inputPanjang")[0].value
+            , lebar: $("#inputLebar")[0].value
+            , stok: $("#inputStok")[0].value
+        };
+        console.log(inventory);        
+        
+        $.ajax({
+            url: 'http://192.168.100.35:3000/insert',
+            data: inventory,
+            type: 'POST',
+            dataType: 'json'
+ 
+        })
+        .success(function (result) {
+            console.log("If success")
+            alert("Inventaris baru berhasil dimasukkan")
+            //$('#products').html(result);
+            //$('#changePriceDiv').show().appendTo($('#products'));
+        })
+        .error(function (xhr, result, error) {
+            console.log("If error")
+            console.log(error);
+            alert(error);
+        })    
+    })
+</script>
+}

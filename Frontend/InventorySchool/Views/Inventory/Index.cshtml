@@ -1,0 +1,108 @@
+﻿@{
+    ViewData["Title"] = "Inventaris";
+}
+
+@*<h2>@ViewData["Title"].</h2>*@
+<h3>@ViewData["Message"].</h3>
+
+@*<ul id="gamelist">
+    
+</ul>*@
+
+<input type="button" value="Buat Baru" class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Create", "Inventory") + "'");" />
+
+<table class="table table-striped table-hover ">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nama</th>
+            <th>Deskripsi</th>
+            <th>Tipe</th>
+            <th>Panjang</th>
+            <th>Lebar</th>
+            <th>Stok</th>
+        </tr>
+    </thead>
+    <tbody id="inventorylist">
+    </tbody>
+</table>
+
+
+@section scripts
+{
+<script type="text/javascript">
+
+    //var games = new Array();
+    //games[0] = "World of Warcraft";
+    //games[1] = "Lord of the Rings Online";
+    //games[2] = "Aion";
+    //games[3] = "Eve Online";
+    //games[4] = "Final Fantasy XI";
+    //games[5] = "City of Heros";
+    //games[6] = "Champions Online";
+    //games[7] = "Dark Age of Camelot";
+    //games[8] = "Warhammer Online";
+    //games[9] = "Age of Conan";
+
+    $(document).ready(function () {
+        $.ajax({
+            url: 'http://192.168.100.35:3000/getallinventaris',
+            //contentType: 'text/html; charset=utf-8',
+            type: 'GET',
+            dataType: 'json'
+
+        })
+        .always(function (result){
+            console.log("Getting Inventory...");
+            
+        })
+        .success(function (result) {
+            console.log("the result if success");            
+            var product = result;
+            //var product = [{ "nama": "Meja murid standar", "deskripsi": "Meja murid standar ukuran 1,5 x 0,6", "tipe": "Meja Murid", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
+            //{ "nama": "Meja Guru standar", "deskripsi": "Meja guru standar ukuran 1,5 x 0,6", "tipe": "Meja Guru", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
+            //{ "nama": "Kursi standar", "deskripsi": "kursi standar ukuran 0,5 x 0,5", "tipe": "Kursi", "stok": "10", "panjang": "0.5", "lebar": "0.5" }];
+
+            $.each(product, function (i, value) {
+                //$("#inventorylist").add();
+                var stringRow = "<tr> <td>" + (i + 1) + "</td>" +
+                "<td>" + value.nama + "</td>" +
+                "<td>" + value.deskripsi + "</td>" +
+                "<td>" + value.tipe + "</td>" +
+                "<td>" + value.panjang + "</td>" +
+                "<td>" + value.lebar + "</td>" +
+                "<td>" + value.stok + "</td> </tr>";
+                $("#inventorylist").append(stringRow);
+                
+            });
+
+        })
+        .error(function (result) {
+            console.log("the result if error");
+            console.log(result.error);
+            var product = [{ "nama": "Meja murid standar", "deskripsi": "Meja murid standar ukuran 1,5 x 0,6", "tipe": "Meja Murid", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
+            { "nama": "Meja Guru standar", "deskripsi": "Meja guru standar ukuran 1,5 x 0,6", "tipe": "Meja Guru", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
+            { "nama": "Kursi standar", "deskripsi": "kursi standar ukuran 0,5 x 0,5", "tipe": "Kursi", "stok": "10", "panjang": "0.5", "lebar": "0.5" }];
+
+            $.each(product, function (i, value) {                
+                var stringRow = "<tr> <td>" + (i + 1) + "</td>" +
+                 "<td>" + value.nama + "</td>" +
+                 "<td>" + value.deskripsi + "</td>" +
+                 "<td>" + value.tipe + "</td>" +
+                 "<td>" + value.panjang + "</td>" +
+                 "<td>" + value.lebar + "</td>" +
+                 "<td>" + value.stok + "</td> </tr>";
+                $("#inventorylist").append(stringRow);
+            });
+        })
+        
+                     
+    //    var list = "";
+    //    for(i=0; i<games.length; i++){
+    //        list +="<li>" +games[i]+"</li>";
+    //    }
+    //$("#gamelist").append(list);
+
+});
+</script>
+}
