@@ -92,7 +92,7 @@ app.post('/postupdate', function(req, res, next){
 });
         
 
-app.post('/delete', function(req, res, next){
+app.post('/postdelete', function(req, res, next){
     var id = req.body.id;
     // Mongoc.connect(mongoUrl, function(err, db){
     //       assert.equal(null, err);
@@ -105,7 +105,19 @@ app.post('/delete', function(req, res, next){
     res.json({ message: 'Successfully deleted' });
 
 });
-// app.delete('/deleteall', function(req, res))
+app.delete('/delete', function(req, res, next){
+    var id = req.body.id;
+    // Mongoc.connect(mongoUrl, function(err, db){
+    //       assert.equal(null, err);
+        db.collection('inventaris').deleteOne({_id:objectid(id)}, function(err, result){
+            assert.equal(null, err);
+            console.log('Item Deleted');
+            // db.close();
+        // });
+    });
+    res.json({ message: 'Successfully deleted' });
+
+})
 app.put('/update', function(req, res, next){
     var item ={
         nama:req.body.nama,
