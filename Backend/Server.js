@@ -42,6 +42,17 @@ app.get('/getallinventaris', function(req, res){
    
     });
 
+}); 
+app.get('/getbyid/:id',function(req, res){
+    var id = req.params.id;
+    var cursor = db.collection('inventaris');
+db.collection("inventaris").find({_id:objectid(id)}).toArray(function( err, docs){
+            assert.equal(null, err);
+            console.log('Item Selected');
+            res.json(docs);
+
+        });
+     
 });
 
 app.post('/insert', function(req, res,next){
