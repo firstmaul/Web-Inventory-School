@@ -13,22 +13,17 @@ namespace InventorySchool.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
+            ViewData["Message"] = "Daftar ruang kelas";
             return View();
         }
 
         public IActionResult Create() {
+            ViewData["Message"] = "Inventaris Baru";
             return View();
         }
-
-        public IActionResult Delete() {
-            return View();
-        }
-
-        public IActionResult Details() {
-            return View();
-        }
-
+        
         public IActionResult Edit() {
+            ViewData["Message"] = "Edit Inventaris";
             return View();
         }
 

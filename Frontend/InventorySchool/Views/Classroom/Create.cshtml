@@ -1,0 +1,106 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewData["Title"] = "Ruang Kelas";
+}
+
+<h3>@ViewData["Message"].</h3>
+
+<form id="classroomForm">    
+    <div class="form-group">
+        <label class="control-label" for="inputName">Nama</label>
+        <input class="form-control" id="inputName" type="text">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputPanjang">Panjang</label>
+        <input class="form-control" id="inputPanjang" type="number">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputLebar">Lebar</label>
+        <input class="form-control" id="inputLebar" type="number">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputBagianGuru">Luas bagian guru</label>
+        <input class="form-control" id="inputBagianGuru" type="number">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputTipeMejaMurid">Tipe Meja Murid</label>
+        <input class="form-control" id="inputTipeMejaMurid" type="text">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputTipeKursi">Tipe Kursi</label>
+        <input class="form-control" id="inputTipeKursi" type="text">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputAktualMejaMurid">jumlah meja murid</label>
+        <input class="form-control" id="inputAktualMejaMurid" type="number">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputAktualKursi">jumlah kursi</label>
+        <input class="form-control" id="inputAktualKursi" type="number">
+    </div>
+    <div class="form-group">
+        <label class="control-label" for="inputAktualMurid">jumlah murid</label>
+        <input class="form-control" id="inputAktualMurid" type="number">
+    </div>    
+    <div class="form-group">
+        <div class="col-lg-10 col-lg-offset-2">
+            <button type="reset" class="btn btn-default">Cancel</button>
+            <button id="btnSubmit" type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </div>
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+        $('#classroomForm').submit(function (event) {
+        //var select = inventoryForm.getElementById("select");
+        //var name = inventoryForm.getElementById("inputName");
+        //var deskripsi = inventoryForm.getElementById("inputDeskripsi");
+        //var panjang = inventoryForm.getElementById("inputPanjang");
+        //var lebar = inventoryForm.getElementById("inputLebar");
+        //var stok = inventoryForm.getElementById("inputStok");
+
+        event.preventDefault();
+
+        //var $form = $(this);
+        //var term = $form.find("input[name='inputName']").val();
+        //var url = $form.attr("action");
+        var classroom = {
+            nama: $("#inputName")[0].value                        
+            , panjang: $("#inputPanjang")[0].value
+            , lebar: $("#inputLebar")[0].value
+            , bagianguru: $("#inputBagianGuru")[0].value
+            , mejamurid: $("#inputTipeMejaMurid")[0].value
+            , kursi: $("#inputTipeKursi")[0].value
+            , aktualmejamurid: $("#inputAktualMejaMurid")[0].value
+            , aktualkursi: $("#inputAktualKursi")[0].value
+            , aktualmurid: $("#inputAktualMurid")[0].value
+            , maxmejamurid: "0"
+            , maxkursi: "0"
+        };
+        console.log(classroom);
+
+        $.ajax({
+            //url: 'http://192.168.1.29:3000/ruangkelasinsert',
+            url: 'http://localhost:3000/ruangkelasinsert',
+            data: classroom,
+            type: 'POST',
+            dataType: 'json'
+
+        })
+        .success(function (result) {
+            console.log("If success")
+            window.location.replace("./index");
+            //$('#products').html(result);
+            //$('#changePriceDiv').show().appendTo($('#products'));
+        })
+        .error(function (xhr, result, error) {
+            console.log("If error")
+            console.log(error);
+            alert(error);
+        })
+    })
+    </script>
+}

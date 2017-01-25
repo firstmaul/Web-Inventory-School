@@ -1,40 +1,43 @@
 ﻿@{
-    ViewData["Title"] = "Inventaris";
+    ViewData["Title"] = "Ruang Kelas";
 }
 
 @*<h2>@ViewData["Title"].</h2>*@
-<h3>@ViewData["Message"].</h3> 
+<h3>@ViewData["Message"].</h3>
 
 
 
-<input type="button" value="Buat Baru" class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Create", "Inventory") + "'");" />
+<input type="button" value="Buat Baru" class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Create", "Classroom") + "'");" />
 
 <table class="table table-striped table-hover ">
     <thead>
         <tr>
-            <th>#</th>
             <th>Nama</th>
-            <th>Deskripsi</th>
-            <th>Tipe</th>
             <th>Panjang</th>
-            <th>Lebar</th>
-            <th>Stok</th>                   
+            <th>lebar</th>
+            <th>bagian guru</th>
+            <th>tipe meja murid</th>
+            <th>tipe kursi</th>
+            <th>aktual meja murid</th>
+            <th>aktual kursi</th>
+            <th>aktual murid</th>
+            <th>max meja murid</th>
+            <th>max kursi</th>            
         </tr>
     </thead>
-    <tbody id="inventorylist">        
-    </tbody>    
+    <tbody id="inventorylist"></tbody>
     <tfoot>
         <tr>
             <td id="loading"></td>
         </tr>
-    </tfoot>    
+    </tfoot>
 </table>
 
 
 
 @section scripts
 {
-<script type="text/javascript">
+    <script type="text/javascript">
 
     //var games = new Array();
     //games[0] = "World of Warcraft";
@@ -54,14 +57,14 @@
 
     function loadTable() {
         $.ajax({
-            //url: 'http://192.168.1.29:3000/getallinventaris',
-            url: 'http://localhost:3000/getallinventaris',
+            //url: 'http://192.168.1.29:3000/ruangkelasget',
+            url: 'http://localhost:3000/ruangkelasget',
             //contentType: 'text/html; charset=utf-8',
             type: 'GET',
             dataType: 'json'
 
         })
-            
+
         .always(function (result) {
             console.log("Getting Inventory...");
             $("#inventorylist").empty();
@@ -75,41 +78,32 @@
             //{ "nama": "Meja Guru standar", "deskripsi": "Meja guru standar ukuran 1,5 x 0,6", "tipe": "Meja Guru", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
             //{ "nama": "Kursi standar", "deskripsi": "kursi standar ukuran 0,5 x 0,5", "tipe": "Kursi", "stok": "10", "panjang": "0.5", "lebar": "0.5" }];
 
-            $.each(product, function (i, value) {
+            $.each(product, function (i, value) {                
                 //$("#inventorylist").add();
                 var stringRow = "<tr> <td>" + (i + 1) + "</td>" +
                 "<td><a href='"+window.location+"/Edit?id="+value._id+"'>"+ value.nama + "</a></td>" +
-                "<td>" + value.deskripsi + "</td>" +
-                "<td>" + value.tipe + "</td>" +
                 "<td>" + value.panjang + "</td>" +
                 "<td>" + value.lebar + "</td>" +
-                "<td>" + value.stok + "</td>" +
+                "<td>" + value.bagianguru + "</td>" +
+                "<td>" + value.mejamurid + "</td>" +
+                "<td>" + value.kursi + "</td>" +
+                "<td>" + value.aktualmejamurid + "</td>" +
+                "<td>" + value.aktualkursi + "</td>" +
+                "<td>" + value.aktualmurid + "</td>" +
+                "<td>" + value.maxmejamurid + "</td>" +
+                "<td>" + value.maxkursi + "</td>" +
                  "<td> <button onclick=fDelete('" + value._id + "') class='btn btn-default'>Delete </button> </td> </tr>";
                 $("#inventorylist").append(stringRow);
             });
         })
         .fail(function (result) {
             console.log("the result if error");
-            console.log(result.error);
-            var product = [{ "nama": "Meja murid standar", "deskripsi": "Meja murid standar ukuran 1,5 x 0,6", "tipe": "Meja Murid", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
-            { "nama": "Meja Guru standar", "deskripsi": "Meja guru standar ukuran 1,5 x 0,6", "tipe": "Meja Guru", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
-            { "nama": "Kursi standar", "deskripsi": "kursi standar ukuran 0,5 x 0,5", "tipe": "Kursi", "stok": "10", "panjang": "0.5", "lebar": "0.5" }];
-
-            $.each(product, function (i, value) {
-                var stringRow = "<tr> <td>" + (i + 1) + "</td>" +
-                 "<td>" + value.nama + "</td>" +
-                 "<td>" + value.deskripsi + "</td>" +
-                 "<td>" + value.tipe + "</td>" +
-                 "<td>" + value.panjang + "</td>" +
-                 "<td>" + value.lebar + "</td>" +
-                 "<td>" + value.stok + "</td> </tr>";
-                $("#inventorylist").append(stringRow);
-            });
+            alert("Terjadi kesalahan");            
         })
         .then(function (result) {
             $('#loading').hide();
         });
-    
+
 
     };
 
@@ -125,8 +119,8 @@
 
         console.log(inventoryId);
         $.ajax({
-            //url: 'http://192.168.1.29:3000/delete',
-            url: 'http://localhost:3000/delete',
+            //url: 'http://192.168.1.29:3000/ruangkelasdelete',
+            url: 'http://localhost:3000/ruangkelasdelete',
             data: inventoryId,
             type: 'DELETE',
             dataType: 'json',
@@ -138,7 +132,7 @@
 
         })
         .done(function (result) {
-            console.log("Successfuly delete...");            
+            console.log("Successfuly delete...");
         })
         .fail(function (xhr, result, error) {
             console.log(error);
@@ -149,5 +143,5 @@
         });
     }
 
-</script>
+    </script>
 }

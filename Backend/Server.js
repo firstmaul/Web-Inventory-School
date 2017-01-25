@@ -154,6 +154,7 @@ app.get('/ruangkelasget', function(req, res){
         res.json(docs); 
     });
 });
+
 app.get('/ruangkelasgetbyid/:id', function(req, res){
     var id = req.params.id;
     var cursor = db.collection('ruangkelas');
@@ -166,6 +167,7 @@ app.get('/ruangkelasgetbyid/:id', function(req, res){
 app.post('/ruangkelasinsert', function(req, res,next){
     console.log('Starting');
     
+
     // var hasil = json.body;
     var itemruangkelas ={
         nama:req.body.nama,
@@ -182,6 +184,7 @@ app.post('/ruangkelasinsert', function(req, res,next){
 
 
     };
+    console.log(itemruangkelas);
     // Mongoc.connect(mongoUrl, function(err, db){
     //     assert.equal(null, err);
         db.collection('ruangkelas').insert(itemruangkelas, function(err, result){
@@ -190,7 +193,7 @@ app.post('/ruangkelasinsert', function(req, res,next){
             // db.close();
         // });
     });
-    res.json(item);
+    res.json(itemruangkelas);
 });
 
 app.post('/ruangkelaspostupdate', function(req, res, next){
