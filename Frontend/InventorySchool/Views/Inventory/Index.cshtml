@@ -20,7 +20,7 @@
             <th>Tipe</th>
             <th>Panjang</th>
             <th>Lebar</th>
-            <th>Stok</th>
+            <th>Stok</th>                   
         </tr>
     </thead>
     <tbody id="inventorylist">
@@ -44,7 +44,9 @@
     //games[8] = "Warhammer Online";
     //games[9] = "Age of Conan";
 
-    $(document).ready(function () {
+    $(document).ready(loadTable);
+
+    function loadTable() {
         $.ajax({
             url: 'http://192.168.100.35:3000/getallinventaris',
             //contentType: 'text/html; charset=utf-8',
@@ -54,10 +56,12 @@
         })
         .always(function (result){
             console.log("Getting Inventory...");
-            
+            $("#inventorylist").empty();
         })
         .success(function (result) {
-            console.log("the result if success");            
+            console.log("the result if success");
+            
+            
             var product = result;
             //var product = [{ "nama": "Meja murid standar", "deskripsi": "Meja murid standar ukuran 1,5 x 0,6", "tipe": "Meja Murid", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
             //{ "nama": "Meja Guru standar", "deskripsi": "Meja guru standar ukuran 1,5 x 0,6", "tipe": "Meja Guru", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
@@ -71,9 +75,9 @@
                 "<td>" + value.tipe + "</td>" +
                 "<td>" + value.panjang + "</td>" +
                 "<td>" + value.lebar + "</td>" +
-                "<td>" + value.stok + "</td> </tr>";
-                $("#inventorylist").append(stringRow);
-                
+                "<td>" + value.stok + "</td>" +
+                 "<td> <button onclick=fDelete('"+value._id+"') class='btn btn-default'>Delete </button> </td> </tr>";
+                $("#inventorylist").append(stringRow);                
             });
 
         })
@@ -97,12 +101,45 @@
         })
         
                      
-    //    var list = "";
-    //    for(i=0; i<games.length; i++){
-    //        list +="<li>" +games[i]+"</li>";
-    //    }
-    //$("#gamelist").append(list);
+        //    var list = "";
+        //    for(i=0; i<games.length; i++){
+        //        list +="<li>" +games[i]+"</li>";
+        //    }
+        //$("#gamelist").append(list);
 
-});
+    };
+
+    function fDelete(deleteId) {
+        //event.preventDefault();
+        console.log("Deletting record");
+        console.log(deleteId);
+        var inventoryId = {
+            id: deleteId
+        };
+
+        var form = $(this);
+
+        console.log(inventoryId);
+        $.ajax({
+            url: 'http://192.168.100.35:3000/delete',
+            data: inventoryId,
+            type: 'DELETE',            
+            dataType: 'json',
+            crossDomain: true
+
+        })
+        .always(function (result) {
+            console.log("From server...");
+
+        })
+        .success(function (result) {            
+            console.log("Successfuly delete...");
+            loadTable();
+        })
+        .error(function (xhr, result, error) {
+            console.log(error);
+        })
+    }
+
 </script>
 }
