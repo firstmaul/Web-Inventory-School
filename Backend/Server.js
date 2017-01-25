@@ -11,6 +11,7 @@ app.use(bodyparser.urlencoded({
 app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.header("Access-Control-Allow-Methods", "DELETE");
         next();
         });
 
@@ -30,7 +31,7 @@ router.get('/', function(req, res, next){
 });
 
 
-
+//tabel inventaris
 app.get('/getallinventaris', function(req, res){
     
     var cursor = db.collection('inventaris');
@@ -43,10 +44,6 @@ app.get('/getallinventaris', function(req, res){
 
 });
 
-
-// app.use(function(req, res, next){
-//             res.header('Acces-Control-Allow-Origin');
-// });
 app.post('/insert', function(req, res,next){
     console.log('Starting');
     
@@ -107,6 +104,7 @@ app.post('/postdelete', function(req, res, next){
 });
 app.delete('/delete', function(req, res, next){
     var id = req.body.id;
+    console.log('deleting...');
     // Mongoc.connect(mongoUrl, function(err, db){
     //       assert.equal(null, err);
         db.collection('inventaris').deleteOne({_id:objectid(id)}, function(err, result){
@@ -135,6 +133,130 @@ app.put('/update', function(req, res, next){
     res.json({ message: 'Successfully Updated' });
 
 });
+
+//tabel classroom
+app.get('/ruangkelasget', function(req, res){
+    
+    var cursor = db.collection('ruangkelas');
+    cursor.find().toArray(function(err, docs){
+        console.log('fetching')
+        res.json(docs);
+
+   
+    });
+
+});
+
+app.post('/ruangkelasinsert', function(req, res,next){
+    console.log('Starting');
+    
+    // var hasil = json.body;
+    var itemruangkelas ={
+        nama:req.body.nama,
+        panjang:req.body.panjang,
+        lebar:req.body.lebar,
+        bagianguru:req.body.bagianguru,
+        mejamurid:req.body.mejamurid,
+        kursi:req.body.kursi,
+        aktualmejamurid:req.body.aktualmejamurid,
+        aktualkursi:req.body.aktualkursi,
+        aktualmurid:req.body.aktualmurid,
+        maxmejamurid:req.body.maxmejamurid,
+        maxkursi:req.body.maxkursi
+
+
+    };
+    // Mongoc.connect(mongoUrl, function(err, db){
+    //     assert.equal(null, err);
+        db.collection('ruangkelas').insert(itemruangkelas, function(err, result){
+            assert.equal(null, err);
+            console.log('Item Inserted');
+            // db.close();
+        // });
+    });
+    res.json(item);
+});
+
+app.post('/ruangkelaspostupdate', function(req, res, next){
+    var itemruangkelas ={
+        nama:req.body.nama,
+        panjang:req.body.panjang,
+        lebar:req.body.lebar,
+        bagianguru:req.body.bagianguru,
+        mejamurid:req.body.mejamurid,
+        kursi:req.body.kursi,
+        aktualmejamurid:req.body.aktualmejamurid,
+        aktualkursi:req.body.aktualkursi,
+        aktualmurid:req.body.aktualmurid,
+        maxmejamurid:req.body.maxmejamurid,
+        maxkursi:req.body.maxkursi
+
+
+    };
+    var id = req.body.id;
+    // Mongoc.connect(mongoUrl, function(err, db){
+        assert.equal(null, err);
+        db.collection('ruangkelas').updateOne({_id:objectid(id)},{$set:itemruangkelas}, function(err, result){
+            assert.equal(null, err);
+            console.log('Item Updated');
+        // });
+    });
+    res.json({ message: 'Successfully Updated' });
+});
+        
+
+app.post('/ruangkelaspostdelete', function(req, res, next){
+    var id = req.body.id;
+    // Mongoc.connect(mongoUrl, function(err, db){
+    //       assert.equal(null, err);
+        db.collection('ruangkelas').deleteOne({_id:objectid(id)}, function(err, result){
+            assert.equal(null, err);
+            console.log('Item Deleted');
+            // db.close();
+        // });
+    });
+    res.json({ message: 'Successfully deleted' });
+
+});
+app.delete('/ruangkelasdelete', function(req, res, next){
+    var id = req.body.id;
+    // Mongoc.connect(mongoUrl, function(err, db){
+    //       assert.equal(null, err);
+        db.collection('ruangkelas').deleteOne({_id:objectid(id)}, function(err, result){
+            assert.equal(null, err);
+            console.log('Item Deleted');
+            // db.close();
+        // });
+    });
+    res.json({ message: 'Successfully deleted' });
+
+})
+app.put('/ruangkelasupdate', function(req, res, next){
+    var itemruangkelas ={
+        nama:req.body.nama,
+        panjang:req.body.panjang,
+        lebar:req.body.lebar,
+        bagianguru:req.body.bagianguru,
+        mejamurid:req.body.mejamurid,
+        kursi:req.body.kursi,
+        aktualmejamurid:req.body.aktualmejamurid,
+        aktualkursi:req.body.aktualkursi,
+        aktualmurid:req.body.aktualmurid,
+        maxmejamurid:req.body.maxmejamurid,
+        maxkursi:req.body.maxkursi
+
+
+    };
+    var id = req.body.id;
+    db.collection('ruangkelas').updateOne({_id:objectid(id) },{$set:itemruangkelas},function(err, result) {
+        assert.equal(null, err);
+        console.log('Item Updated');
+    });
+    res.json({ message: 'Successfully Updated' });
+
+});
+
+
 
 
 
