@@ -54,7 +54,8 @@
 
     function loadTable() {
         $.ajax({
-            url: 'http://192.168.1.29:3000/getallinventaris',
+            //url: 'http://192.168.1.29:3000/getallinventaris',
+            url: 'http://localhost:3000/getallinventaris',
             //contentType: 'text/html; charset=utf-8',
             type: 'GET',
             dataType: 'json'
@@ -131,7 +132,8 @@
 
         console.log(inventoryId);
         $.ajax({
-            url: 'http://192.168.1.29:3000/delete',
+            //url: 'http://192.168.1.29:3000/delete',
+            url: 'http://localhost:3000/delete',
             data: inventoryId,
             type: 'DELETE',            
             dataType: 'json',
@@ -148,7 +150,7 @@
         })
         .fail(function (xhr, result, error) {
             console.log(error);
-            boo
+            
         })
     }
 
