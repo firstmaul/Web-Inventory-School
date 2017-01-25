@@ -3,11 +3,9 @@
 }
 
 @*<h2>@ViewData["Title"].</h2>*@
-<h3>@ViewData["Message"].</h3>
+<h3>@ViewData["Message"].</h3> 
 
-@*<ul id="gamelist">
-    
-</ul>*@
+
 
 <input type="button" value="Buat Baru" class="btn btn-primary" onclick="@("window.location.href='" + @Url.Action("Create", "Inventory") + "'");" />
 
@@ -23,9 +21,15 @@
             <th>Stok</th>                   
         </tr>
     </thead>
-    <tbody id="inventorylist">
-    </tbody>
+    <tbody id="inventorylist">        
+    </tbody>    
+    <tfoot>
+        <tr>
+            <td id="loading"></td>
+        </tr>
+    </tfoot>    
 </table>
+
 
 
 @section scripts
@@ -44,24 +48,27 @@
     //games[8] = "Warhammer Online";
     //games[9] = "Age of Conan";
 
-    $(document).ready(loadTable);
+    $(document).ready(function (event) {
+        loadTable()
+    });
 
     function loadTable() {
         $.ajax({
-            url: 'http://192.168.100.35:3000/getallinventaris',
+            url: 'http://192.168.1.29:3000/getallinventaris',
             //contentType: 'text/html; charset=utf-8',
             type: 'GET',
             dataType: 'json'
 
         })
-        .always(function (result){
+            
+        .always(function (result) {
             console.log("Getting Inventory...");
             $("#inventorylist").empty();
         })
-        .success(function (result) {
+        .done(function (result) {
             console.log("the result if success");
-            
-            
+
+
             var product = result;
             //var product = [{ "nama": "Meja murid standar", "deskripsi": "Meja murid standar ukuran 1,5 x 0,6", "tipe": "Meja Murid", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
             //{ "nama": "Meja Guru standar", "deskripsi": "Meja guru standar ukuran 1,5 x 0,6", "tipe": "Meja Guru", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
@@ -70,25 +77,24 @@
             $.each(product, function (i, value) {
                 //$("#inventorylist").add();
                 var stringRow = "<tr> <td>" + (i + 1) + "</td>" +
-                "<td>" + value.nama + "</td>" +
+                "<td><a href='"+window.location+"/Edit?id="+value._id+"'>"+ value.nama + "</a></td>" +
                 "<td>" + value.deskripsi + "</td>" +
                 "<td>" + value.tipe + "</td>" +
                 "<td>" + value.panjang + "</td>" +
                 "<td>" + value.lebar + "</td>" +
                 "<td>" + value.stok + "</td>" +
-                 "<td> <button onclick=fDelete('"+value._id+"') class='btn btn-default'>Delete </button> </td> </tr>";
-                $("#inventorylist").append(stringRow);                
+                 "<td> <button onclick=fDelete('" + value._id + "') class='btn btn-default'>Delete </button> </td> </tr>";
+                $("#inventorylist").append(stringRow);
             });
-
         })
-        .error(function (result) {
+        .fail(function (result) {
             console.log("the result if error");
             console.log(result.error);
             var product = [{ "nama": "Meja murid standar", "deskripsi": "Meja murid standar ukuran 1,5 x 0,6", "tipe": "Meja Murid", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
             { "nama": "Meja Guru standar", "deskripsi": "Meja guru standar ukuran 1,5 x 0,6", "tipe": "Meja Guru", "stok": "10", "panjang": "1.5", "lebar": "0.6" },
             { "nama": "Kursi standar", "deskripsi": "kursi standar ukuran 0,5 x 0,5", "tipe": "Kursi", "stok": "10", "panjang": "0.5", "lebar": "0.5" }];
 
-            $.each(product, function (i, value) {                
+            $.each(product, function (i, value) {
                 var stringRow = "<tr> <td>" + (i + 1) + "</td>" +
                  "<td>" + value.nama + "</td>" +
                  "<td>" + value.deskripsi + "</td>" +
@@ -99,6 +105,10 @@
                 $("#inventorylist").append(stringRow);
             });
         })
+        .then(function (result) {
+            $('#loading').hide();
+        });
+        
         
                      
         //    var list = "";
@@ -121,7 +131,7 @@
 
         console.log(inventoryId);
         $.ajax({
-            url: 'http://192.168.100.35:3000/delete',
+            url: 'http://192.168.1.29:3000/delete',
             data: inventoryId,
             type: 'DELETE',            
             dataType: 'json',
@@ -132,12 +142,13 @@
             console.log("From server...");
 
         })
-        .success(function (result) {            
+        .done(function (result) {            
             console.log("Successfuly delete...");
             loadTable();
         })
-        .error(function (xhr, result, error) {
+        .fail(function (xhr, result, error) {
             console.log(error);
+            boo
         })
     }
 

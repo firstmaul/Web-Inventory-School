@@ -70,7 +70,7 @@
         console.log(inventory);        
         
         $.ajax({
-            url: 'http://192.168.100.35:3000/insert',
+            url: 'http://192.168.1.29:3000/insert',
             data: inventory,
             type: 'POST',
             dataType: 'json'
@@ -78,7 +78,7 @@
         })
         .success(function (result) {
             console.log("If success")
-            window.location.replace("~/index.cshtml");
+            window.location.replace("./index.cshtml");
             //$('#products').html(result);
             //$('#changePriceDiv').show().appendTo($('#products'));
         })
