@@ -18,12 +18,12 @@ namespace InventorySchool.Controllers
         }
 
         public IActionResult Create() {
-            ViewData["Message"] = "Inventaris Baru";
+            ViewData["Message"] = "Ruang kelas Baru";
             return View();
         }
         
         public IActionResult Edit() {
-            ViewData["Message"] = "Edit Inventaris";
+            ViewData["Message"] = "Edit Ruang kelas";
             return View();
         }
 
